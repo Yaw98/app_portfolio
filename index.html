@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Portfolio</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00a8cc;
+            --secondary-color: #0077be;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .portfolio-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .portfolio-header h1 {
+            font-weight: 600;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .portfolio-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .project-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Fill grid cell height */
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .project-img {
+            height: 200px;
+            object-fit: cover;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 2rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 0.5rem;
+        }
+        
+        .card-text {
+            margin-bottom: 0.75rem;
+        }
+        
+        .card-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        .tech-stack {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tech-stack.show {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 10px);
+        }
+        
+        .tech-stack-content {
+            padding: 15px;
+        }
+        
+        .tech-stack h6 {
+            color: #00a8cc;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .tech-stack ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        
+        .tech-stack li {
+            display: inline-block;
+            background: #e9ecef;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin: 3px;
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        
+        .toggle-tech-stack {
+            background: transparent;
+            border: 1px solid #00a8cc;
+            color: #00a8cc;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-tech-stack:hover {
+            background: #00a8cc;
+            color: white;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            align-items: stretch; /* Make cards equal height for button alignment */
+        }
+        
+        @media (min-width: 768px) {
+            .row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="portfolio-header">
+        <div class="container">
+            <h1>App Portfolio</h1>
+            <p>Showcasing a collection of all apps I have created</p>
+        </div>
+    </header>
+
+    <!-- Projects Section -->
+    <section class="container py-5">
+        <h2 class="section-title">My Projects</h2>
+        
+        <div class="row">
+            <!-- Project 1 - Yewodan -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 2rem;">
+                        <img src="logos/yewodan.svg" alt="Yewodan Logo" style="max-width: 100%; max-height: 160px; width: auto; height: auto;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Yewodan</h5>
+                        <p class="card-text">A platform connecting tenants, visitors and property managers</p>
+                        <div class="btn-container">
+                            <div class="dropdown align-self-start">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="yewodanDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    View Project
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="yewodanDropdown">
+                                    <li><a class="dropdown-item" href="https://www.yewodan.com" target="_blank"><i class="fas fa-globe me-2"></i>Web Version</a></li>
+                                    <li><a class="dropdown-item" href="https://apps.microsoft.com/store/detail/9PBB10JVK6LW?cid=DevShareMCLPCS" target="_blank"><i class="fab fa-windows me-2"></i>Windows Store</a></li>
+                                </ul>
+                            </div>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JS(Bootstrap)</li>
+                                        <li>PHP</li>
+                                        <li>MariaDB</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 2 - Laid to Rest -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <img src="logos/laidtorest.png" alt="Laid to Rest Logo" style="max-width: 100%; max-height: 180px; width: auto; height: auto; object-fit: contain;">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Laid to Rest</h5>
+                        <p class="card-text">A comprehensive mapping application showing graveyards for loved ones, friends and family.</p>
+                        <div class="btn-container">
+                            <a href="https://www.laidtorest.online" class="btn btn-primary align-self-start" target="_blank">View Project</a>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JS(Bootstrap, Leaflet)</li>
+                                        <li>PHP</li>
+                                        <li>PostgreSQL</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 3 - iFocus Ghana -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <img src="logos/ifocusghana.png" alt="iFocus Ghana Logo" style="max-width: 100%; max-height: 180px; width: auto; height: auto; object-fit: contain;">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">ifocus Ghana</h5>
+                        <p class="card-text flex-grow-1">The number customer service provider in Ghana.</p>
+                        <div class="btn-container">
+                            <a href="https://www.ifocusghana.com" class="btn btn-primary align-self-start" target="_blank">View Project</a>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JS</li>
+                                        <li>PHP</li>
+                                        <li>MariaDB</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 4 - Mike Express Travel Consult -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <img src="logos/mikeexpresstravelconsult.png" alt="Mike Express Travel Consult Logo" style="max-width: 100%; max-height: 180px; width: auto; height: auto; object-fit: contain;">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Mike Express Travel Consult</h5>
+                        <p class="card-text flex-grow-1">Your trusted partner for all travel and visa consultation services.</p>
+                        <div class="btn-container">
+                            <a href="https://mikeexpresstravelconsult.com/" class="btn btn-primary align-self-start" target="_blank">View Project</a>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JS</li>
+                                        <li>PHP</li>
+                                        <li>MariaDB</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 5 - Tema Reference Data -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 1.5rem; color: #333;">Tema Reference Data</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Tema Reference Data</h5>
+                        <p class="card-text flex-grow-1">A web app built for land surveyors to obtain GPS reference controls from a particular city in Ghana</p>
+                        <div class="btn-container">
+                            <a href="https://weprint.click/" class="btn btn-primary align-self-start" target="_blank">View Project</a>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>HTML</li>
+                                        <li>CSS</li>
+                                        <li>JS</li>
+                                        <li>PHP</li>
+                                        <li>MariaDB</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 6 - Unzipped -->
+            <div>
+                <div class="card project-card">
+                    <div class="project-img" style="background-color: #ffffff; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+                        <img src="logos/unzipped.png" alt="Unzipped Logo" style="max-width: 100%; max-height: 180px; width: auto; height: auto; object-fit: contain;">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Unzipped</h5>
+                        <p class="card-text flex-grow-1">A modern automatic file decompression and extraction tool that makes managing your files simple and efficient</p>
+                        <div class="btn-container">
+                            <a href="https://apps.microsoft.com/store/detail/9PKRFH5819RM?cid=DevShareMCLPCS" class="btn btn-primary align-self-start" target="_blank">View Project</a>
+                            <button class="toggle-tech-stack align-self-start">View Tech Stack</button>
+                            <div class="tech-stack">
+                                <div class="tech-stack-content">
+                                    <h6>Technologies Used:</h6>
+                                    <ul>
+                                        <li>Python</li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-4 bg-light mt-5">
+        <div class="container text-center">
+            <p class="mb-0" id="currentYear"> 2023 My Portfolio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update copyright year
+            const yearElement = document.getElementById('currentYear');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear() + ' My Portfolio. All rights reserved.';
+            }
+            
+            // Initialize tech stack toggles
+            document.querySelectorAll('.toggle-tech-stack').forEach(button => {
+                // Set initial button text
+                button.textContent = 'View Tech Stack';
+                
+                // Add click event
+                button.addEventListener('click', function() {
+                    const techStack = this.nextElementSibling;
+                    if (techStack && techStack.classList.contains('tech-stack')) {
+                        // Toggle visibility
+                        if (techStack.classList.contains('show')) {
+                            techStack.classList.remove('show');
+                            this.textContent = 'View Tech Stack';
+                        } else {
+                            techStack.classList.add('show');
+                            this.textContent = 'Hide Tech Stack';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
